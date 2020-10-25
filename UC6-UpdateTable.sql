@@ -1,6 +1,6 @@
 -- MySQL dump 10.13  Distrib 8.0.22, for Win64 (x86_64)
 --
--- Host: 127.0.0.1    Database: payroll_service
+-- Host: 127.0.0.1    Database: employee_payroll
 -- ------------------------------------------------------
 -- Server version	8.0.22
 
@@ -16,7 +16,34 @@
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
 
 --
--- Dumping routines for database 'payroll_service'
+-- Table structure for table `employee_payroll`
+--
+
+DROP TABLE IF EXISTS `employee_payroll`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `employee_payroll` (
+  `ID` int unsigned NOT NULL AUTO_INCREMENT,
+  `NAME` varchar(150) NOT NULL,
+  `GENDER` varchar(1) DEFAULT NULL,
+  `SALARY` double NOT NULL,
+  `START_DATE` date NOT NULL,
+  PRIMARY KEY (`ID`)
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `employee_payroll`
+--
+
+LOCK TABLES `employee_payroll` WRITE;
+/*!40000 ALTER TABLE `employee_payroll` DISABLE KEYS */;
+INSERT INTO `employee_payroll` VALUES (1,'Manpreet','M',50000,'2020-10-25'),(2,'Jaspreet','M',80000,'2020-11-25');
+/*!40000 ALTER TABLE `employee_payroll` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Dumping routines for database 'employee_payroll'
 --
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
@@ -28,4 +55,4 @@
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2020-10-25 21:26:48
+-- Dump completed on 2020-10-25 22:46:23
