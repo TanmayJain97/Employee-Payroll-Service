@@ -18,3 +18,16 @@ SELECT
     *
 FROM
     employee_payroll;
+	
+SELECT 
+    SALARY
+FROM
+    employee_payroll
+WHERE
+    NAME = 'Manpreet';
+SELECT 
+    *
+FROM
+    employee_payroll
+WHERE
+    START_DATE BETWEEN CAST('2020-01-01' AS DATE) AND DATE(NOW());
