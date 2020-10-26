@@ -1,0 +1,97 @@
+MySQL Shell 8.0.22
+
+Copyright (c) 2016, 2020, Oracle and/or its affiliates.
+Oracle is a registered trademark of Oracle Corporation and/or its affiliates.
+Other names may be trademarks of their respective owners.
+
+Type '\help' or '\?' for help; '\quit' to exit.
+ MySQL  JS > \sql
+Switching to SQL mode... Commands end with ;
+ MySQL  SQL > \connect root@localhost
+Creating a session to 'root@localhost'
+Fetching schema names for autocompletion... Press ^C to stop.
+Your MySQL connection id is 34 (X protocol)
+Server version: 8.0.22 MySQL Community Server - GPL
+No default schema selected; type \use <schema> to set one.
+
+ MySQL  localhost:33060+ ssl  SQL > show databases;
++---------------------+
+| Database            |
++---------------------+
+| address_book_service|
+| information_schema  |
+| mysql               |
+| payroll_service     |
+| performance_schema  |
+| sakila              |
+| sys                 |
+| world               |
++---------------------+
+7 rows in set (0.0012 sec)
+
+ MySQL  localhost:33060+ ssl  SQL > use payroll_service;
+Default schema set to `payroll_service`.
+Fetching table and column names from `payroll_service` for auto-completion... Press ^C to stop.
+
+ MySQL  localhost:33060+ ssl  payroll_service  SQL > use payroll_service;
+Default schema set to `payroll_service`.
+Fetching table and column names from `payroll_service` for auto-completion... Press ^C to stop.
+
+ MySQL  localhost:33060+ ssl  payroll_service  SQL > show tables;
++---------------------------+
+| Tables_in_payroll_service |
++---------------------------+
+| employee_payroll          |
++---------------------------+
+1 row in set (0.0015 sec)
+
+ MySQL  localhost:33060+ ssl  payroll_service  SQL > select * from employee_payroll;
++----+---------+--------+---------+------------+
+| ID | NAME    | gender | SALARY  | START_DATE |
++----+---------+--------+---------+------------+
+|  1 | Bill    | M      | 1000000 | 2018-01-03 |
+|  2 | Terisa  | F      | 3000000 | 2019-11-13 |
+|  3 | Charlie | M      | 3000000 | 2020-05-21 |
++----+---------+--------+---------+------------+
+3 rows in set (0.0008 sec)
+
+MySQL  localhost:33060+ ssl  payroll_service  SQL > alter table employee_payroll
+                                                  -> add column phone varchar(10) not null,
+                                                  -> add column department varchar(40) not null,
+                                                  -> add column address varchar(500) default 'Bhosle Market Rd' not null;
+Query OK, 0 rows affected (0.0386 sec)
+
+Records: 0  Duplicates: 0  Warnings: 0
+
+ MySQL  localhost:33060+ ssl  payroll_service  SQL > alter table employee_payroll
+                                                  -> add column basic_pay double default 0 not null,
+                                                  -> add column deductions double default 0 not null,
+                                                  -> add column taxable_pay double default 0 not null,
+                                                  -> add column income_tax double default 0 not null,
+                                                  -> add column net_pay double default 0 not null;
+Query OK, 0 rows affected (0.0412 sec)
+
+Records: 0  Duplicates: 0  Warnings: 0
+
+ MySQL  localhost:33060+ ssl  payroll_service  SQL > update employee_payroll
+                                                  -> set department='Sales' where name='Terisa';
+Query OK, 1 row affected (0.0030 sec)
+
+Rows matched: 1  Changed: 1  Warnings: 0
+
+ MySQL  localhost:33060+ ssl  payroll_service  SQL > insert into employee_payroll(name,gender,salary,start_date,phone,department)
+                                                  -> values('Terisa','F',3500000,'2020-04-10','8465128762','Marketing');
+Query OK, 1 row affected (0.0040 sec)
+
+ MySQL  localhost:33060+ ssl  payroll_service  SQL > select * from employee_payroll;
++----+---------+--------+---------+------------+------------+------------+------------------+-----------+------------+-------------+------------+---------+
+| ID | NAME    | gender | SALARY  | START_DATE | phone      | department | address          | basic_pay | deductions | taxable_pay | income_tax | net_pay |
++----+---------+--------+---------+------------+------------+------------+------------------+-----------+------------+-------------+------------+---------+
+|  1 | Bill    | M      | 1000000 | 2018-01-03 |            |            | Bhosle Market Rd |         0 |          0 |           0 |          0 |       0 |
+|  2 | Terisa  | F      | 3000000 | 2019-11-13 |            | Sales      | Bhosle Market Rd |         0 |          0 |           0 |          0 |       0 |
+|  3 | Charlie | M      | 3000000 | 2020-05-21 |            |            | Bhosle Market Rd |         0 |          0 |           0 |          0 |       0 |
+|  5 | Terisa  | F      | 3500000 | 2020-04-10 | 8465128762 | Marketing  | Bhosle Market Rd |         0 |          0 |           0 |          0 |       0 |
++----+---------+--------+---------+------------+------------+------------+------------------+-----------+------------+-------------+------------+---------+
+4 rows in set (0.0005 sec)
+
+ MySQL  localhost:33060+ ssl  payroll_service  SQL >
