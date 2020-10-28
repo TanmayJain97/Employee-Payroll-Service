@@ -94,4 +94,225 @@ Query OK, 1 row affected (0.0040 sec)
 +----+---------+--------+---------+------------+------------+------------+------------------+-----------+------------+-------------+------------+---------+
 4 rows in set (0.0005 sec)
 
- MySQL  localhost:33060+ ssl  payroll_service  SQL >
+ MySQL  localhost:33060+ ssl  payroll_service  SQL > CREATE TABLE company (
+                                                  -> COMP_ID INT UNSIGNED AUTO_INCREMENT,
+                                                  -> COMP_NAME VARCHAR(50) NOT NULL default 'Capgemini',
+                                                  -> PRIMARY KEY (COMP_ID)
+                                                  -> );
+Query OK, 0 rows affected (0.0630 sec)
+ 
+ MySQL  localhost:33060+ ssl  payroll_service  SQL > INSERT INTO company(COMP_NAME) VALUES
+                                                  -> (DEFAULT),
+                                                  -> ('TCS');
+Query OK, 2 rows affected (0.0041 sec)
+
+Records: 2  Duplicates: 0  Warnings: 0
+
+ MySQL  localhost:33060+ ssl  payroll_service  SQL > SELECT * FROM company;
++---------+-----------+
+| COMP_ID | COMP_NAME |
++---------+-----------+
+|       1 | Capgemini |
+|       2 | TCS       |
++---------+-----------+
+2 rows in set (0.0009 sec)
+
+ MySQL  localhost:33060+ ssl  payroll_service  SQL > CREATE TABLE employee (
+                                                  ->     COMP_ID INT UNSIGNED AUTO_INCREMENT,
+                                                  ->     EMP_ID INT UNSIGNED NOT NULL,
+                                                  ->     EMP_NAME VARCHAR(40) NOT NULL,
+                                                  ->     PHONE VARCHAR(10) NOT NULL,
+                                                  ->     ADDRESS VARCHAR(500) NOT NULL DEFAULT 'Bhosle Market Rd',
+                                                  ->     GENDER CHAR(1) NOT NULL,
+                                                  ->     PRIMARY KEY (EMP_ID),
+												  ->     FOREIGN KEY (COMP_ID) REFERENCES company(COMP_ID)
+                                                  -> );
+Query OK, 0 rows affected (0.0281 sec)
+
+ MySQL  localhost:33060+ ssl  payroll_service  SQL > INSERT INTO employee VALUES
+                                                  -> (1,111,'Manpreet','8462215981','SMR Colony', 'M'),
+                                                  -> (2,1001,'Jaspreet','9856321778','MG Road', 'M'),
+                                                  -> (1,112,'Terisa','9654021598', 'MG Road', 'F'),
+                                                  -> (1,113,'Terisa','8632875422','NQ Avenue', 'F')
+                                                  -> ;
+Query OK, 4 rows affected (0.0051 sec)
+
+Records: 4  Duplicates: 0  Warnings: 0
+
+ MySQL  localhost:33060+ ssl  payroll_service  SQL > SELECT * FROM employee;
++---------+--------+----------+------------+------------+--------+
+| COMP_ID | EMP_ID | EMP_NAME | PHONE      | ADDRESS    | GENDER |
++---------+--------+----------+------------+------------+--------+
+|       1 |    111 | Manpreet | 8462215981 | SMR Colony | M      |
+|       1 |    112 | Terisa   | 9654021598 | MG Road    | F      |
+|       1 |    113 | Terisa   | 8632875422 | NQ Avenue  | F      |
+|       2 |   1001 | Jaspreet | 9856321778 | MG Road    | M      |
++---------+--------+----------+------------+------------+--------+
+4 rows in set (0.0018 sec)
+
+ MySQL  localhost:33060+ ssl  payroll_service  SQL > CREATE TABLE payroll (
+                                                  ->     EMP_ID INT UNSIGNED NOT NULL,
+                                                  ->     BASIC_PAY DOUBLE DEFAULT 0 NOT NULL,
+                                                  ->     DEDUCTIONS DOUBLE DEFAULT 0 NOT NULL,
+                                                  ->     TAXABLE_PAY DOUBLE DEFAULT 0 NOT NULL,
+                                                  ->     INCOME_TAX DOUBLE DEFAULT 0 NOT NULL,
+                                                  ->     NET_PAY DOUBLE DEFAULT 0 NOT NULL,
+												  ->     FOREIGN KEY (EMP_ID) REFERENCES employee(EMP_ID)
+                                                  -> );
+Query OK, 0 rows affected (0.0305 sec)
+
+ MySQL  localhost:33060+ ssl  payroll_service  SQL > INSERT INTO payroll(EMP_ID,BASIC_PAY) VALUES
+                                                  -> (111,50000.0),
+                                                  -> (112,100000.0),
+                                                  -> (113,90000.0),
+                                                  -> (1001,80000.0)
+                                                  -> ;
+Query OK, 4 rows affected (0.0045 sec)
+
+Records: 4  Duplicates: 0  Warnings: 0
+
+ MySQL  localhost:33060+ ssl  payroll_service  SQL > SELECT * FROM payroll;
++--------+-----------+------------+-------------+------------+---------+
+| EMP_ID | BASIC_PAY | DEDUCTIONS | TAXABLE_PAY | INCOME_TAX | NET_PAY |
++--------+-----------+------------+-------------+------------+---------+
+|    111 |     50000 |          0 |           0 |          0 |       0 |
+|    112 |    100000 |          0 |           0 |          0 |       0 |
+|    113 |     90000 |          0 |           0 |          0 |       0 |
+|   1001 |     80000 |          0 |           0 |          0 |       0 |
++--------+-----------+------------+-------------+------------+---------+
+4 rows in set (0.0005 sec)
+
+ MySQL  localhost:33060+ ssl  payroll_service  SQL > CREATE TABLE department (
+                                                  ->     DEPT_ID INT NOT NULL AUTO_INCREMENT,
+                                                  ->     DEPT_NAME VARCHAR(20) DEFAULT 'NOT ALLOTTED' NOT NULL,
+                                                  ->     PRIMARY KEY (DEPT_ID)
+                                                  -> );
+Query OK, 0 rows affected (0.0318 sec)
+
+ MySQL  localhost:33060+ ssl  payroll_service  SQL > INSERT INTO department(DEPT_NAME) VALUES
+                                                  -> ('Sales'),
+                                                  -> ('Marketing'),
+                                                  -> ('HR'),
+                                                  -> (DEFAULT)
+                                                  -> ;
+Query OK, 4 rows affected (0.0075 sec)
+
+Records: 4  Duplicates: 0  Warnings: 0
+
+ MySQL  localhost:33060+ ssl  payroll_service  SQL > SELECT * FROM department;
++---------+--------------+
+| DEPT_ID | DEPT_NAME    |
++---------+--------------+
+|       1 | Sales        |
+|       2 | Marketing    |
+|       3 | HR           |
+|       4 | NOT ALLOTTED |
++---------+--------------+
+4 rows in set (0.0004 sec)
+
+MySQL  localhost:33060+ ssl  payroll_service  SQL > CREATE TABLE emp_dept_relations (
+                                                  ->     DEPT_ID INT NOT NULL AUTO_INCREMENT,
+												  ->     EMP_ID INT UNSIGNED NOT NULL,
+												  ->     PRIMARY KEY (EMP_ID,DEPT_ID),
+												  ->     FOREIGN KEY (EMP_ID) REFERENCES employee(EMP_ID),
+												  ->     FOREIGN KEY (DEPT_ID) REFERENCES department(DEPT_ID)
+                                                  -> );
+Query OK, 0 rows affected (0.0179 sec)
+
+ MySQL  localhost:33060+ ssl  payroll_service  SQL > INSERT INTO emp_dept_relations VALUES
+                                                  -> (112,1),
+                                                  -> (113,2),
+                                                  -> (111,3),
+                                                  -> (1001,3)
+                                                  -> ;
+Query OK, 4 rows affected (0.0095 sec)
+
+Records: 4  Duplicates: 0  Warnings: 0
+
+ MySQL  localhost:33060+ ssl  payroll_service  SQL > SELECT * FROM emp_dept_relations;
++--------+---------+
+| EMP_ID | DEPT_ID |
++--------+---------+
+|    112 |       1 |
+|    113 |       2 |
+|    111 |       3 |
+|   1001 |       3 |
++--------+---------+
+4 rows in set (0.0017 sec)
+
+MySQL  localhost:33060+ ssl  payroll_service  SQL > SELECT e.EMP_NAME, p.BASIC_PAY FROM
+                                                  -> employee e JOIN payroll p
+                                                  -> ON e.EMP_ID = p.EMP_ID
+                                                  -> WHERE e.EMP_NAME = 'Jaspreet';
++----------+-----------+
+| EMP_NAME | BASIC_PAY |
++----------+-----------+
+| Jaspreet |     80000 |
++----------+-----------+
+1 row in set (0.0013 sec)
+
+MySQL  localhost:33060+ ssl  payroll_service  SQL > SELECT GENDER,COUNT(EMP_NAME) FROM employee
+                                                  -> GROUP BY GENDER;
++--------+-----------------+
+| GENDER | COUNT(EMP_NAME) |
++--------+-----------------+
+| M      |               2 |
+| F      |               2 |
++--------+-----------------+
+2 rows in set (0.0025 sec)
+
+ MySQL  localhost:33060+ ssl  payroll_service  SQL > SELECT e.EMP_NAME, p.BASIC_PAY FROM
+                                                  -> employee e JOIN payroll p
+                                                  -> ON e.EMP_ID = p.EMP_ID
+                                                  -> WHERE e.GENDER = 'F';
++----------+-----------+
+| EMP_NAME | BASIC_PAY |
++----------+-----------+
+| Terisa   |    100000 |
+| Terisa   |     90000 |
++----------+-----------+
+2 rows in set (0.0005 sec)
+
+ MySQL  localhost:33060+ ssl  payroll_service  SQL > SELECT SUM(BASIC_PAY) FROM
+                                                  -> employee e JOIN payroll p
+                                                  -> ON e.EMP_ID = p.EMP_ID
+                                                  -> WHERE e.GENDER = 'F';
++----------------+
+| SUM(BASIC_PAY) |
++----------------+
+|         190000 |
++----------------+
+1 row in set (0.0006 sec)
+
+ MySQL  localhost:33060+ ssl  payroll_service  SQL > SELECT AVG(BASIC_PAY) FROM
+                                                  -> employee e JOIN payroll p
+                                                  -> ON e.EMP_ID = p.EMP_ID
+                                                  -> WHERE e.GENDER = 'F';
++----------------+
+| AVG(BASIC_PAY) |
++----------------+
+|          95000 |
++----------------+
+1 row in set (0.0022 sec)
+
+ MySQL  localhost:33060+ ssl  payroll_service  SQL > SELECT MIN(BASIC_PAY) FROM
+                                                  -> employee e JOIN payroll p
+                                                  -> ON e.EMP_ID = p.EMP_ID
+                                                  -> WHERE e.GENDER = 'F';
++----------------+
+| MIN(BASIC_PAY) |
++----------------+
+|          90000 |
++----------------+
+1 row in set (0.0006 sec)
+
+ MySQL  localhost:33060+ ssl  payroll_service  SQL > SELECT MAX(BASIC_PAY) FROM
+                                                  -> employee e JOIN payroll p
+                                                  -> ON e.EMP_ID = p.EMP_ID
+                                                  -> WHERE e.GENDER = 'F';
++----------------+
+| MAX(BASIC_PAY) |
++----------------+
+|         100000 |
++----------------+
+1 row in set (0.0007 sec)
